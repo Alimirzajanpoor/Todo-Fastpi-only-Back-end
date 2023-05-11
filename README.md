@@ -33,7 +33,7 @@ You also need to create a single `.env` file and specify the below required envi
 ### Running the project with Docker
 
 To start the server, RabbitMQ, and PostgreSQL with Docker, run the following command from the project directory:
--'docker-compose up --build'
+- 'docker-compose up --build'
 ### Running the project without Docker
 
 first you need to install RabbitMQ,and PostgresSQL and installing requirements.txt:
