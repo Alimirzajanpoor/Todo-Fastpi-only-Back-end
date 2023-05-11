@@ -4,9 +4,17 @@ services:
   db:
     container_name: PostgreSQL
     image: postgres
-    restart: on-failure
-    ports:
-      - "5432:5432"
+    #restart: on-failure
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=my_db
+    volumes:
+
+      - ./postgres-data:/var/lib/postgresql/data
+
     env_file:
       - ./.env
     
@@ -14,8 +22,8 @@ services:
     container_name: pgAdmin
     image: dpage/pgadmin4
     environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
-      - PGADMIN_DEFAULT_PASSWORD=admin
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
     ports:
       - "5050:80"
     depends_on:
@@ -23,17 +31,17 @@ services:
   rabbitmq:
     container_name: rabbitmq
     image: rabbitmq
-    ports:
-      - "5672:5672"
-      - "15672:15672"
+
   
   fastapi:
     container_name: fastapi
     build: .
-    command: bash -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000"
-    restart: on-failure
+    command: bash -c "uvicorn main:app --host 0.0.0.0 --port 8000"
+    
     ports:
       - "8000:8000"
+    environment:
+      - SQLALCHAMY_DATABASE_URL=postgresql://admin:admin@db:5432/my_db
     env_file:
       - ./.env
     depends_on:
@@ -42,7 +50,7 @@ services:
   celery:
     container_name: celery
     build: .
-    command: celery -A utils.celery_worker.app worker --loglevel=info
+    command: celery -A tasks worker --loglevel=info -P solo
     env_file:
       - ./.env
     depends_on:
