@@ -37,8 +37,11 @@ To start the server, RabbitMQ, and PostgreSQL with Docker, run the following com
 ### Running the project without Docker
 
 first you need to install RabbitMQ,and PostgresSQL and installing requirements.txt:
+
 start the Celery worker, open a new terminal window and navigate to the project directory. Run the following command:
+
 -`celery -A tasks worker --loglevel=info`
+
 run `uvicorn main:app`
 
 
