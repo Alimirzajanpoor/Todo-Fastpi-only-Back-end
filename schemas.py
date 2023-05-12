@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List,Union,Optional
 from datetime import datetime
+
 class BlogBase(BaseModel):
     title:str
     body: str
@@ -39,5 +40,5 @@ class todo_data(BaseModel):
     title: str
     detail: Optional[str] = None
     is_done: bool = False
-    remind_on: datetime = None
+    remind_on: str = datetime.now().strftime("%m/%d/%y %H:%M:%S")
     task_id: str =None
