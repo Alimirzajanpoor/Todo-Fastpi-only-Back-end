@@ -13,8 +13,8 @@ router=APIRouter(
 
 get_db=database.get_db
 @router.get('/')
-def generate_otp(db: Session= Depends(database.get_db),current_user: schemas.User= Depends(oaut2.get_current_user)):
-    return otp_verfify.generate_otp()
+def generate_otp(telegram_id: int,db: Session= Depends(database.get_db),current_user: schemas.User= Depends(oaut2.get_current_user)):
+    return otp_verfify.generate_otp(telegram_id)
 @router.post('/',status_code=status.HTTP_201_CREATED)
 def verify(otp:int,db: Session= Depends(database.get_db), current_user: schemas.User= Depends(oaut2.get_current_user)):
 
